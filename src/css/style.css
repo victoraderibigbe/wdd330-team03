@@ -90,7 +90,7 @@ p {
   margin-top: -1.3em;
 }
 
-.logo--square > div {
+.logo--square>div {
   margin-top: -1.7em;
 }
 
@@ -260,4 +260,16 @@ button {
 footer {
   font-size: var(--small-font);
   padding: 1em;
+}
+
+/* Discount indicator */
+.discount-badge {
+  display: inline-block;
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 0.3em 0.6em;
+  margin-bottom: 0.5em;
+  font-size: var(--small-font);
+  font-weight: bold;
+  border-radius: 3px;
 }

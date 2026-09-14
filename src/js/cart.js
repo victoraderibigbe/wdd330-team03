@@ -1,13 +1,30 @@
-import { getLocalStorage } from './utils.mjs';
+import { getLocalStorage, setLocalStorage } from './utils.mjs';
 
 function renderCartContents() {
-  const cartItems = getLocalStorage('so-cart');
+  const cartItems = getLocalStorage('so-cart') || [];
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   document.querySelector('.product-list').innerHTML = htmlItems.join('');
+  addRemoveListeners();
+}
+
+function addRemoveListeners() {
+  const removeButtons = document.querySelectorAll('.remove-button');
+  removeButtons.forEach((button) => {
+    button.addEventListener('click', removeFromCart);
+  });
+}
+
+function removeFromCart(event) {
+  const productId = event.target.dataset.id;
+  const cartItems = getLocalStorage('so-cart') || [];
+  const newCartItems = cartItems.filter((item) => item.Id !== productId);
+  setLocalStorage('so-cart', newCartItems);
+  renderCartContents();
 }
 
 function cartItemTemplate(item) {
   const newItem = `<li class='cart-card divider'>
+  <button class='remove-button' data-id='${item.Id}' type='button'>X</button>
   <a href='#' class='cart-card__image'>
     <img
       src='${item.Image}'

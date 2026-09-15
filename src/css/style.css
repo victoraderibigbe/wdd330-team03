@@ -248,6 +248,12 @@ button {
   grid-column: 3;
 }
 
+.cart-empty-message {
+  text-align: center;
+  font-size: var(--small-font);
+  padding: 2em 0;
+}
+
 @media screen and (min-width: 500px) {
   body {
     max-width: 1080px;

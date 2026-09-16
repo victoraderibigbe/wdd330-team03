@@ -1,4 +1,10 @@
-import { getLocalStorage, setLocalStorage } from './utils.mjs';
+
+import { getLocalStorage, setLocalStorage, loadHeaderFooter } from './utils.mjs';
+
+
+// This line exists so the header and footer actually show up on this
+// page too, the same way we set it up for the homepage.
+loadHeaderFooter();
 
 function renderCartContents() {
   const cartItems = getLocalStorage('so-cart') || [];

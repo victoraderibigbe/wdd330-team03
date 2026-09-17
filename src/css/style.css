@@ -274,3 +274,26 @@ footer {
   font-size: var(--small-font);
   padding: 1em;
 }
+
+
+/* This section exists to control the size and layout of the four
+   category icons on the homepage. Without this, the SVG images show
+   up at whatever size they were originally created at, which can be
+   much bigger than we want on the page. */
+.categories {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.categories img {
+  width: 80px;
+  height: 80px;
+}
+
+.categories a {
+  text-decoration: none;
+  color: inherit;
+}

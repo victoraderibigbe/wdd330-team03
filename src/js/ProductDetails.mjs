@@ -8,7 +8,7 @@ export default class ProductDetails {
     }
 
 
-    async init(){
+    async init() {
         this.product = await this.dataSource.findProductById(this.productId);
         this.renderProductDetails(this.product);
 
@@ -18,8 +18,8 @@ export default class ProductDetails {
     addProductToCart() {
         let itensCart = getLocalStorage('so-cart') || []; // get the current cart items from local storage, or initialize an empty array if none exist
         if (!itensCart.some((item) => item.Id === this.product.Id)) {
-        // prevent adding duplicate items to the cart by checking if the product already exists in the cart
-        itensCart.push(this.product);
+            // prevent adding duplicate items to the cart by checking if the product already exists in the cart
+            itensCart.push(this.product);
         }
         setLocalStorage('so-cart', itensCart);
     }
@@ -29,7 +29,7 @@ export default class ProductDetails {
         document.querySelector('h3').textContent = product.NameWithoutBrand;
 
         const productImage = document.getElementById('productImage');
-        productImage.src = product.Image;
+        productImage.src = product.Images.PrimaryLarge;
         productImage.alt = product.NameWithoutBrand;
 
         document.getElementById('productPrice').textContent = product.FinalPrice;
@@ -37,6 +37,6 @@ export default class ProductDetails {
         document.getElementById('productDesc').innerHTML = product.DescriptionHtmlSimple;
 
         document.getElementById('addToCart').dataset.id = product.Id;
-        }
+    }
 
 }

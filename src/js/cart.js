@@ -1,4 +1,8 @@
-import { getLocalStorage, setLocalStorage } from './utils.mjs';
+import { getLocalStorage, setLocalStorage, loadHeaderFooter } from './utils.mjs';
+
+// This line exists so the header and footer show up on this
+// page too, the same way we set it up on every other page.
+loadHeaderFooter();
 
 function renderCartContents() {
   const cartItems = getLocalStorage('so-cart') || [];
@@ -37,12 +41,12 @@ function cartItemTemplate(item) {
   <button class='remove-button' data-id='${item.Id}' type='button'>X</button>
   <a href='#' class='cart-card__image'>
     <img
-      src='${item.Image}'
-      alt='${item.Name}'
+      src='${item.Images.PrimaryMedium}'
+      alt='${item.NameWithoutBrand}'
     />
   </a>
   <a href='#'>
-    <h2 class='card__name'>${item.Name}</h2>
+    <h2 class='card__name'>${item.NameWithoutBrand}</h2>
   </a>
   <p class='cart-card__color'>${item.Colors[0].ColorName}</p>
   <p class='cart-card__quantity'>qty: 1</p>

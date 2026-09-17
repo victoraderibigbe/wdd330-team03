@@ -1,10 +1,13 @@
-import { getUrlParam } from './utils.mjs';
+import { getUrlParam, loadHeaderFooter } from './utils.mjs';
 import ProductData from './ProductData.mjs';
 import ProductDetails from './ProductDetails.mjs';
 
-const dataSource = new ProductData('tents');
-const productId = getUrlParam('product');
+// This line exists so the header and footer show up on this
+// page too, the same way we set it up on every other page.
+loadHeaderFooter();
 
+const dataSource = new ProductData();
+const productId = getUrlParam('product');
 
 const productDetails = new ProductDetails(productId, dataSource);
 productDetails.init();

@@ -10,6 +10,12 @@ loadHeaderFooter();
 // knows whether the shopper clicked Tents, Backpacks, etc.
 const category = getUrlParam('category');
 
+// This line exists so the page's heading shows which category the
+// shopper is currently browsing, e.g. "Top Products: backpacks"
+document.querySelector('h2').textContent = `Top Products: ${category}`;
+
+
+
 const dataSource = new ProductData();
 const productList = new ProductList(
     category,

@@ -1,11 +1,7 @@
-// wrapper for querySelector...returns matching element
 export function qs(selector, parent = document) {
   return parent.querySelector(selector);
 }
-// or a more concise version if you are into that sort of thing:
-// export const qs = (selector, parent = document) => parent.querySelector(selector);
 
-// retrieve data from localstorage
 export function getLocalStorage(key) {
   const value = localStorage.getItem(key);
   if (!value) {
@@ -14,17 +10,14 @@ export function getLocalStorage(key) {
   try {
     return JSON.parse(value);
   } catch (error) {
-    // malformed/corrupted value (e.g. cleared to an empty string in DevTools)
     return null;
   }
 }
 
-// save data to local storage
 export function setLocalStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
 
-// set a listener for both touchend and click
 export function setClick(selector, callback) {
   qs(selector).addEventListener('touchend', (event) => {
     event.preventDefault();
@@ -50,4 +43,35 @@ export function renderListWithTemplate(
   }
   const htmlStrings = list.map(templateFn);
   parentElement.insertAdjacentHTML(position, htmlStrings.join(''));
+}
+
+export function renderWithTemplate(template, parentElement, data, callback) {
+  parentElement.innerHTML = template;
+  if (callback) {
+    callback(data);
+  }
+}
+
+export async function loadTemplate(path) {
+  const res = await fetch(path);
+  const template = await res.text();
+  return template;
+}
+
+export async function loadHeaderFooter() {
+  const headerTemplate = await loadTemplate('/partials/header.html');
+  const headerElement = document.querySelector('#main-header');
+  renderWithTemplate(headerTemplate, headerElement, null, updateCartCount);
+
+  const footerTemplate = await loadTemplate('/partials/footer.html');
+  const footerElement = document.querySelector('#main-footer');
+  renderWithTemplate(footerTemplate, footerElement);
+}
+
+export function updateCartCount() {
+  const cartItems = getLocalStorage('so-cart') || [];
+  const cartCountElement = document.getElementById('cart-count');
+  if (cartCountElement) {
+    cartCountElement.textContent = cartItems.length;
+  }
 }

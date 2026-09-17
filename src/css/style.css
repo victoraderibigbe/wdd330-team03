@@ -274,3 +274,28 @@ footer {
   font-size: var(--small-font);
   padding: 1em;
 }
+
+/* This section exists to turn the plain number into a small circular
+   badge that sits in the top-right corner of the cart icon, so it
+   looks like a notification bubble showing how many items are in
+   the cart. */
+.cart {
+  position: relative;
+}
+
+.cart-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: orangered;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}

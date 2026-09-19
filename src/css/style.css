@@ -274,3 +274,31 @@ footer {
   font-size: var(--small-font);
   padding: 1em;
 }
+
+/*discount*/
+.product__discount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 5px 0;
+}
+
+.product__original-price {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 0.9em;
+}
+
+.product__discount-badge {
+  background-color: #e63946;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.85em;
+}
+
+.product__savings {
+  color: #2a9d8f;
+  font-size: 0.85em;
+}

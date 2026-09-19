@@ -39,4 +39,25 @@ export default class ProductDetails {
         document.getElementById('addToCart').dataset.id = product.Id;
         }
 
+    renderDiscount(product) {
+    const discountEl = document.getElementById('productDiscount');
+    if (!discountEl) return;
+
+    const original = product.SuggestedRetailPrice;
+    const final = product.FinalPrice;
+
+    if (original && original > final) {
+        const savings = (original - final).toFixed(2);
+        const percentOff = Math.round(((original - final) / original) * 100);
+
+        discountEl.innerHTML = `
+            <span class="product__original-price">$${original}</span>
+            <span class="product__discount-badge">-${percentOff}% OFF</span>
+            <span class="product__savings">You save $${savings}</span>
+        `;
+        discountEl.style.display = '';
+    } else {
+        discountEl.style.display = 'none'; // sin descuento, se oculta
+    }
+}
 }

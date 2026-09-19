@@ -45,6 +45,10 @@ export function renderListWithTemplate(
   parentElement.insertAdjacentHTML(position, htmlStrings.join(''));
 }
 
+
+// This function exists because every page needs the same header and footer,
+// and instead of copying that HTML onto every page by hand, this function
+// drops it into place automatically wherever it's needed.
 export function renderWithTemplate(template, parentElement, data, callback) {
   parentElement.innerHTML = template;
   if (callback) {
@@ -52,6 +56,9 @@ export function renderWithTemplate(template, parentElement, data, callback) {
   }
 }
 
+// This function exists because the header and footer HTML live in their
+// own separate files, and this function's job is to go fetch that file's
+// content so it can be used elsewhere on the page.
 export async function loadTemplate(path) {
   const res = await fetch(path);
   const template = await res.text();

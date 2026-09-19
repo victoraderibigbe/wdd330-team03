@@ -1,7 +1,21 @@
 import ProductData from './ProductData.mjs';
+import ProductList from './ProductList.mjs';
+import { loadHeaderFooter } from './utils.mjs';
 
+// Load the shared header and footer
+loadHeaderFooter();
+
+// Load the products
 const dataSource = new ProductData('tents');
+const productList = new ProductList(
+  'tents',
+  dataSource,
+  document.querySelector('.product-list'),
+);
 
+productList.init();
+
+// Add discount indicators to discounted products
 async function addDiscountIndicators() {
   const products = await dataSource.getData();
   const productLinks = document.querySelectorAll('.product-list li a');

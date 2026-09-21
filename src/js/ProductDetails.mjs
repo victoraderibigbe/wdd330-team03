@@ -20,7 +20,15 @@ export default class ProductDetails {
         let itensCart = getLocalStorage('so-cart') || []; // get the current cart items from local storage, or initialize an empty array if none exist
         if (!itensCart.some((item) => item.Id === this.product.Id)) {
         // prevent adding duplicate items to the cart by checking if the product already exists in the cart
-        itensCart.push(this.product);
+        itensCart.push({ ...this.product, Quantity: 1 });
+        }else{
+            itensCart = itensCart.map((item) => {
+                
+                if(item.Id === this.product.Id){
+                    item.Quantity += 1;
+                }
+                return item;
+            });
         }
         setLocalStorage('so-cart', itensCart);
     }

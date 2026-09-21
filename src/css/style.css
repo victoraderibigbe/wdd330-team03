@@ -275,27 +275,30 @@ footer {
   padding: 1em;
 }
 
-/* This section exists to turn the plain number into a small circular
-   badge that sits in the top-right corner of the cart icon, so it
-   looks like a notification bubble showing how many items are in
-   the cart. */
-.cart {
-  position: relative;
-}
-
-.cart-count {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  background-color: orangered;
-  color: white;
-  font-size: 0.75rem;
-  font-weight: bold;
-  min-width: 18px;
-  height: 18px;
-  border-radius: 50%;
+/*discount*/
+.product__discount {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 0 4px;
+  gap: 8px;
+  margin: 5px 0;
+}
+
+.product__original-price {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 0.9em;
+}
+
+.product__discount-badge {
+  background-color: #e63946;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.85em;
+}
+
+.product__savings {
+  color: #2a9d8f;
+  font-size: 0.85em;
 }

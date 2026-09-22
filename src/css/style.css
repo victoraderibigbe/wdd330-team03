@@ -214,13 +214,13 @@ button {
 }
 
 .remove-button {
-  position: absolute;
-  top: 0;
-  right: 0;
+  grid-row: 1;
+  grid-column: 3;
+  justify-self: end;
 }
 
 .cart-card__image {
-  grid-row: 1/3;
+  grid-row: 1/4;
   grid-column: 1;
 }
 
@@ -239,12 +239,12 @@ button {
 }
 
 .cart-card__quantity {
-  grid-row: 1;
+  grid-row: 2;
   grid-column: 3;
 }
 
 .cart-card__price {
-  grid-row: 2;
+  grid-row: 3;
   grid-column: 3;
 }
 
@@ -295,4 +295,31 @@ footer {
 .category-list a {
   text-decoration: none;
   color: inherit;
+
+/*discount*/
+.product__discount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 5px 0;
+}
+
+.product__original-price {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 0.9em;
+}
+
+.product__discount-badge {
+  background-color: #e63946;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.85em;
+}
+
+.product__savings {
+  color: #2a9d8f;
+  font-size: 0.85em;
 }

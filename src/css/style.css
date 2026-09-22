@@ -295,7 +295,7 @@ footer {
 .category-list a {
   text-decoration: none;
   color: inherit;
-
+}
 /*discount*/
 .product__discount {
   display: flex;

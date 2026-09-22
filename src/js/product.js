@@ -1,3 +1,8 @@
+import { getParam, loadHeaderFooter } from './utils.mjs';
+import ProductData from './ProductData.mjs';
+import ProductDetails from './ProductDetails.mjs';
+
+loadHeaderFooter();
 import { getUrlParam, loadHeaderFooter } from './utils.mjs';
 import ProductData from './ProductData.mjs';
 import ProductDetails from './ProductDetails.mjs';
@@ -10,9 +15,11 @@ loadHeaderFooter();
 const dataSource = new ProductData('tents');
 const productId = getUrlParam('product');
 
+const dataSource = new ProductData('tents');
+const productID = getParam('product');
 
-const productDetails = new ProductDetails(productId, dataSource);
-productDetails.init();
+const product = new ProductDetails(productID, dataSource);
+product.init();
 
 // function addProductToCart(product) {
 //   let itensCart = getLocalStorage('so-cart') || []; // get the current cart items from local storage, or initialize an empty array if none exist

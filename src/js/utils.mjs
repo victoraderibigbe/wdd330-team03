@@ -26,9 +26,11 @@ export function setClick(selector, callback) {
   qs(selector).addEventListener('click', callback);
 }
 
-export function getUrlParam(param) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
+export function getParam(param) {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const product = urlParams.get(param);
+  return product;
 }
 
 export function renderListWithTemplate(
@@ -56,6 +58,7 @@ export function renderWithTemplate(template, parentElement, data, callback) {
   }
 }
 
+async function loadTemplate(path) {
 // This function exists because the header and footer HTML live in their
 // own separate files, and this function's job is to go fetch that file's
 // content so it can be used elsewhere on the page.
@@ -66,6 +69,15 @@ export async function loadTemplate(path) {
 }
 
 export async function loadHeaderFooter() {
+  const headerTemplate = await loadTemplate('../partials/header.html');
+  const footerTemplate = await loadTemplate('../partials/footer.html');
+
+  const headerElement = document.querySelector('#main-header');
+  const footerElement = document.querySelector('#main-footer');
+
+  renderWithTemplate(headerTemplate, headerElement);
+  renderWithTemplate(footerTemplate, footerElement);
+}
   const headerTemplate = await loadTemplate('/partials/header.html');
   const headerElement = document.querySelector('#main-header');
   renderWithTemplate(headerTemplate, headerElement, null, updateCartCount);

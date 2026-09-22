@@ -274,3 +274,25 @@ footer {
   font-size: var(--small-font);
   padding: 1em;
 }
+.category-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  list-style: none;
+  padding: 0;
+  justify-content: center;
+}
+
+.category-list li {
+  text-align: center;
+}
+
+.category-list img {
+  width: 100px;
+  height: 100px;
+}
+
+.category-list a {
+  text-decoration: none;
+  color: inherit;
+}

@@ -323,3 +323,20 @@ footer {
   color: #2a9d8f;
   font-size: 0.85em;
 }
+
+/*Discount Badge*/
+.product-card__image-wrapper {
+  position: relative;
+}
+
+.product-card__discount-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: #e63946;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.8em;
+}

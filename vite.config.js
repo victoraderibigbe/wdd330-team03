@@ -16,7 +16,8 @@ export default defineConfig({
         product: resolve(
           __dirname,
           'src/product_pages/index.html',
-        )
+        ),
+        product_listing: resolve(__dirname, 'src/product_listing/index.html'),
       },
     },
   },

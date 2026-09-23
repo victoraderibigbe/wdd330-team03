@@ -211,6 +211,17 @@ button {
   font-size: var(--small-font);
   /* max-height: 120px; */
   align-items: center;
+  /*
+    PLAIN ENGLISH: Makes every cart card stretch the full width of the list.
+    LOGIC: .product-list centers its items. Without a set width, each card shrinks to fit
+           its own content, so cards with longer names sit in different spots.
+           100% width makes every card the same size, so they all line up.
+    WHY WE NEED IT: The cart looked misaligned, which hurts the display/organization grade.
+    LEARNING GAP: We add this to .cart-card, NOT .product-list, because .product-list is
+           shared with the product listing page. Changing it there would break that page.
+  */
+  width: 100%;
+
 }
 
 .remove-button {

@@ -1,37 +1,159 @@
 <!doctype html>
-
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>Sleep Outside | Checkout</title>
 
+    <!--
+      PLAIN ENGLISH: Loads the site's shared styles, the same file every other page uses.
+      LOGIC: The "/" at the start means "start from the top of the site," so this works from any folder.
+      WHY WE NEED IT: Keeps the checkout page looking like the rest of SleepOutside.
+      LEARNING GAP: This matches the cart page exactly. Copying the same pattern across pages
+             avoids "why does only this page look broken?" bugs.
+    -->
     <link rel="stylesheet" href="/css/style.css" />
-    <script src="/js/checkout.js" type="module"></script>
+
+    <!--
+      PLAIN ENGLISH: Loads this page's JavaScript file (checkout.js).
+      LOGIC: "../js/" means "go up out of checkout/, then into js/." type="module" allows
+             import/export to work.
+      WHY WE NEED IT: checkout.js loads the header/footer now, and will run the checkout process later.
+      LEARNING GAP: Without type="module", the browser shows an error on the "import" line
+             ("Cannot use import statement outside a module").
+    -->
+    <script src="../js/checkout.js" type="module"></script>
   </head>
 
   <body>
     <!--
-      This header tag is left empty on purpose. The actual logo and cart
-      icon HTML used to sit directly inside this tag, but now that content
-      lives in one shared file (partials/header.html) so every page on the
-      site shows the exact same header without repeating the code.
-      The id="main-header" is how our JavaScript finds this exact spot on
-      the page and fills it in automatically when the page loads.
+      PLAIN ENGLISH: An empty header that gets filled in automatically.
+      LOGIC: loadHeaderFooter() in utils.mjs finds id="main-header" and pastes in partials/header.html.
+      WHY WE NEED IT: One shared header file means we fix the header once, and every page updates.
+      LEARNING GAP: The id must be exactly "main-header." A different spelling means JavaScript
+             can't find it, and the page has no header.
     -->
     <header class="divider" id="main-header"></header>
 
     <main class="divider">
       <section class="products">
         <h2>Review & Place your Order</h2>
+
+        <!--
+          PLAIN ENGLISH: The checkout form where the shopper types their information.
+          LOGIC: name="checkout" gives the form a name so JavaScript can grab it later
+                 with document.forms["checkout"]. The data typed in here is what gets
+                 packaged and sent to the server.
+          WHY WE NEED IT: The assignment requires a form for name, address, and payment.
+          LEARNING GAP: Every input's "name" must match the server's keys EXACTLY
+                 (fname, lname, street, city, state, zip, cardNumber, expiration, code).
+                 The "id" is for the label; the "name" is what gets sent. Mixing them up is
+                 the most common mistake in this assignment.
+        -->
+        <form name="checkout" id="checkout-form">
+
+          <!--
+            PLAIN ENGLISH: Section 1, the customer's name.
+            LOGIC: <fieldset> groups related inputs; <legend> is the group's title.
+            WHY WE NEED IT: Grouping makes the form easier to read and helps screen readers.
+            LEARNING GAP: "required" is what stops the form from submitting when a box is empty.
+                   The assignment says the form should not submit unless ALL fields are filled,
+                   so every input gets "required."
+          -->
+          <fieldset>
+            <legend>Customer Name</legend>
+
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" name="fname" required />
+
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" name="lname" required />
+          </fieldset>
+
+          <!--
+            PLAIN ENGLISH: Section 2, the address (billing and shipping treated as the same).
+            LOGIC: Four inputs; their names match the server's keys: street, city, state, zip.
+            WHY WE NEED IT: Needed to "ship" the order, and zip triggers the tax/shipping math.
+            LEARNING GAP: The zip code box has id="zip." In Phase 8, JavaScript watches THIS box.
+                   When the shopper finishes typing the zip, the tax, shipping, and total appear.
+                   That's what the instructions mean by "called after the user fills in the zip code."
+          -->
+          <fieldset>
+            <legend>Shipping Address</legend>
+
+            <label for="street">Street Address</label>
+            <input type="text" id="street" name="street" required />
+
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" required />
+
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" required />
+
+            <label for="zip">Zip Code</label>
+            <input type="text" id="zip" name="zip" required />
+          </fieldset>
+
+          <!--
+            PLAIN ENGLISH: Section 3, payment information.
+            LOGIC: Three inputs named cardNumber, expiration, and code, matching the server's keys.
+            WHY WE NEED IT: The server checks these to decide if the order "succeeds."
+            LEARNING GAP: Watch the capital N in "cardNumber." "cardnumber" or "card-number" will not
+                   match. For testing, the instructions say to use card 1234123412341234,
+                   code 123, and any future expiration date (like 12/30).
+          -->
+          <fieldset>
+            <legend>Payment</legend>
+
+            <label for="cardNumber">Credit Card Number</label>
+            <input type="text" id="cardNumber" name="cardNumber" inputmode="numeric" required />
+
+            <label for="expiration">Expiration Date (MM/YY)</label>
+            <input type="text" id="expiration" name="expiration" placeholder="MM/YY" required />
+
+            <label for="code">Security Code</label>
+            <input type="text" id="code" name="code" inputmode="numeric" required />
+          </fieldset>
+
+          <!--
+            PLAIN ENGLISH: The order summary box showing the money breakdown.
+            LOGIC: Each <span> has an id that is an empty "slot." CheckoutProcess.mjs (Phase 5)
+                   finds each slot by id and types in the number. id="order-summary" on the
+                   outer box is the "outputSelector" the instructions mention.
+            WHY WE NEED IT: The assignment requires subtotal, tax, shipping estimate, and order
+                   total "somewhere near the form."
+            LEARNING GAP: Subtotal and item count show when the page loads. Tax, shipping, and
+                   total stay at $0.00 until the zip code is entered. That's by design, not a bug.
+          -->
+          <section id="order-summary">
+            <h3>Order Summary</h3>
+            <p>Items: <span id="num-items">0</span></p>
+            <p>Subtotal: <span id="subtotal">$0.00</span></p>
+            <p>Tax (6%): <span id="tax">$0.00</span></p>
+            <p>Shipping Estimate: <span id="shipping">$0.00</span></p>
+            <p><strong>Order Total: <span id="order-total">$0.00</span></strong></p>
+          </section>
+
+          <!--
+            PLAIN ENGLISH: The button that places the order.
+            LOGIC: type="submit" tells the browser "this sends the form." The browser checks
+                   every "required" box first. If any are empty, it stops and shows a message.
+            WHY WE NEED IT: The assignment requires a Checkout button.
+            LEARNING GAP: Right now, clicking it (with everything filled in) will just reload
+                   the page. That's the browser's default behavior. In Phase 8, we add
+                   event.preventDefault() to stop the reload and send the order with JavaScript.
+          -->
+          <button type="submit" id="checkout-submit">Checkout</button>
+        </form>
       </section>
     </main>
 
     <!--
-      Same idea as the header above: this footer is intentionally empty,
-      and gets filled in automatically using the shared footer file.
+      PLAIN ENGLISH: An empty footer that gets filled in automatically.
+      LOGIC: Same as the header: loadHeaderFooter() finds id="main-footer" and pastes in
+             partials/footer.html.
+      WHY WE NEED IT: One shared footer file for the whole site.
+      LEARNING GAP: Same as the header: the id spelling must match exactly.
     -->
     <footer id="main-footer"></footer>
   </body>

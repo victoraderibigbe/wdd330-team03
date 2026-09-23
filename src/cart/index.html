@@ -56,6 +56,37 @@
             <p class="cart-card__price">$199.99</p>
           </li> -->
         </ul>
+                <!--
+          PLAIN ENGLISH: The box at the bottom of the cart that shows the total and the Checkout link.
+          LOGIC: It starts hidden (the "hidden" attribute). ShoppingCart.mjs fills in the total
+                 and un-hides the box only when the cart has items in it.
+          WHY WE NEED IT: Shoppers need to see what they owe, and they need a way to get to the
+                 checkout page. The assignment requires both.
+          LEARNING GAP: "hidden" is built into HTML, so no extra CSS is needed to hide it. If the
+                 box showed all the time, an empty cart would say "Total: $0.00" with a Checkout
+                 link, which makes no sense to a shopper.
+        -->
+        <div class="cart-footer" hidden>
+          <!--
+            PLAIN ENGLISH: The line that shows the total dollar amount.
+            LOGIC: The <span> with id "cart-total-amount" is an empty slot. JavaScript finds it by
+                   its id and types the number into it.
+            WHY WE NEED IT: The id gives JavaScript an exact "address" to put the total.
+            LEARNING GAP: The "$" sits outside the span on purpose. JavaScript only writes the
+                   number, so we never accidentally show "$$".
+          -->
+          <p class="cart-total">Total: $<span id="cart-total-amount">0.00</span></p>
+
+          <!--
+            PLAIN ENGLISH: The link that takes the shopper to the checkout page.
+            LOGIC: "../" means "go up one folder" (out of cart/), then into checkout/.
+            WHY WE NEED IT: The assignment asks for a Checkout button/link that opens the checkout page.
+            LEARNING GAP: We use a link (<a>) instead of a <button> because it goes to another page.
+                   Links go places; buttons do actions. Clicking it right now will show an error
+                   page, because we haven't built the checkout page yet. That's expected.
+          -->
+          <a href="../checkout/index.html" class="checkout-button">Checkout</a>
+        </div>
       </section>
     </main>
     <footer id="main-footer"></footer>

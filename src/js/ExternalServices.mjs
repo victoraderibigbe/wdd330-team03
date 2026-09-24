@@ -6,18 +6,25 @@
 //               Without Vite, this would be undefined.
 const baseURL = import.meta.env.VITE_SERVER_URL || 'https://wdd330-backend-osp8.onrender.com/';
 
-// PLAIN ENGLISH: Checks the server's reply and turns it into usable JavaScript data.
-// LOGIC: res.ok is true when the server says "success" (status 200-299). If so, .json()
-//        converts the reply text into an object. If not, it throws an error.
-// WHY WE NEED IT: Every request (products AND checkout) needs this same check, so it's
-//                 written once and reused.
-// LEARNING GAP: Next week's activity changes this to show the server's error details.
-//               We're leaving it as is for now, because this week only needs A response.
-function convertToJson(res) {
+// PLAIN ENGLISH: Reads the server's reply, and if something went wrong, passes along the
+//                server's full explanation instead of a vague "Bad Response."
+// LOGIC: 1) Convert the reply body to JSON FIRST. The data comes from the server's response,
+//           and when something fails, the server puts the error details in that body.
+//        2) If res.ok is true (status 200-299), return the data.
+//        3) If not, throw a custom object carrying the server's details in "message."
+// WHY WE NEED IT: The W04 Individual Activity requires detailed error messages from the
+//                 response body, so the shopper can see what to fix.
+// LEARNING GAP: throw new Error() only accepts TEXT, but the server sends an OBJECT
+//               (like { cardNumber: "Invalid Card Number" }). So we throw our own object with
+//               the same "name" and "message" properties an Error has.
+//               "async" is added because we now "await" res.json() inside this function.
+//               The body must be read BEFORE throwing, or the details are lost.
+async function convertToJson(res) {
+  const jsonResponse = await res.json();
   if (res.ok) {
-    return res.json();
+    return jsonResponse;
   } else {
-    throw new Error('Bad Response');
+    throw { name: 'servicesError', message: jsonResponse };
   }
 }
 
@@ -63,11 +70,12 @@ export default class ExternalServices {
     return data.Result;
   }
 
-  // PLAIN ENGLISH: NEW. Sends the finished order to the server.
+  // PLAIN ENGLISH: Sends the finished order to the server.
   // LOGIC: 1) Build an "options" object that says: this is a POST, the data is JSON, and
   //           here is the data (turned into text with JSON.stringify).
   //        2) Send it to .../checkout with fetch(url, options).
-  //        3) Return the server's answer.
+  //        3) Return the server's answer. If the server rejects the order, the error thrown
+  //           by convertToJson passes up to CheckoutProcess.mjs, where it is caught.
   //        The order data (payload) comes from CheckoutProcess.mjs.
   // WHY WE NEED IT: The assignment says to POST the order to the server's checkout address.
   // LEARNING GAP: fetch() does a GET by default. To SEND data, you must pass a second

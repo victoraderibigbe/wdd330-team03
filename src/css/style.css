@@ -285,3 +285,323 @@ footer {
   font-size: var(--small-font);
   padding: 1em;
 }
+
+.category-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  list-style: none;
+  padding: 0;
+  justify-content: center;
+}
+
+.category-list li {
+  text-align: center;
+}
+
+.category-list img {
+  width: 100px;
+  height: 100px;
+}
+
+.category-list a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/*discount*/
+.product__discount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 5px 0;
+}
+
+.product__original-price {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 0.9em;
+}
+
+.product__discount-badge {
+  background-color: #e63946;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.85em;
+}
+
+.product__savings {
+  color: #2a9d8f;
+  font-size: 0.85em;
+}
+
+/*Discount Badge*/
+.product-card__image-wrapper {
+  position: relative;
+}
+
+.product-card__discount-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: #e63946;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.8em;
+}
+
+/* ============================================================
+   W04 Team Activity: Checkout styles
+   Written with NESTED CSS (W04 lesson): child rules live inside
+   their parent, and "&" means "this same element."
+   ============================================================ */
+
+/*
+  PLAIN ENGLISH: Styles the Total + Checkout area at the bottom of the cart page.
+  LOGIC: Flexbox stacks the total and the link, lined up on the right side.
+         The data (the total number) is filled in by ShoppingCart.mjs.
+  WHY WE NEED IT: Makes the total easy to find and the Checkout link look clickable.
+  LEARNING GAP: Setting "display: flex" OVERRIDES the HTML "hidden" attribute. That's why
+         we add "&[hidden] { display: none; }". Without it, the Total and Checkout link
+         would show even on an EMPTY cart, undoing what we tested in Phase 2.
+*/
+.cart-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 0;
+
+  &[hidden] {
+    display: none;
+  }
+
+  /*
+    PLAIN ENGLISH: The "Total: $539.98" line.
+    LOGIC: Bigger and bold so it stands out. padding: 0 cancels the site-wide p padding.
+    WHY WE NEED IT: The total is the most important number on the cart page.
+    LEARNING GAP: The site-wide "p { padding: 0.75rem; }" rule applies to EVERY <p>.
+           We cancel it here only, without changing the rule for the rest of the site.
+  */
+  & .cart-total {
+    padding: 0;
+    font-size: var(--large-font);
+    font-weight: bold;
+  }
+
+  /*
+    PLAIN ENGLISH: Makes the Checkout link look like the site's green buttons.
+    LOGIC: Reuses --secondary-color (the same green as the Add to Cart button).
+    WHY WE NEED IT: Shoppers expect the "next step" to look like a button, not a plain link.
+    LEARNING GAP: It's still an <a> (a link), because it goes to another page. We only
+           changed how it LOOKS, not what it IS.
+  */
+  & .checkout-button {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 0.5em 2em;
+    font-size: var(--large-font);
+    text-decoration: none;
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+}
+
+/*
+  PLAIN ENGLISH: Styles the whole checkout form: a neat, centered column.
+  LOGIC: max-width keeps it from stretching too wide on big screens; margin: auto centers it.
+         Grid with a gap puts even space between each section.
+  WHY WE NEED IT: Before this, every box ran side by side in one long, messy row.
+  LEARNING GAP: We target #checkout-form (the form's id) so these styles only affect THIS
+         form. Styling plain "form" or "input" would change every form on the site.
+*/
+#checkout-form {
+  max-width: 600px;
+  margin: 1rem auto;
+  display: grid;
+  gap: 1.5rem;
+
+  /*
+    PLAIN ENGLISH: Each group box (Customer Name, Shipping Address, Payment).
+    LOGIC: A one-column grid stacks each label ABOVE its input box.
+    WHY WE NEED IT: Labels above boxes is the standard, easy-to-read form layout.
+    LEARNING GAP: We didn't change the HTML at all. CSS alone moved the labels above the
+           boxes. That's the power of keeping structure (HTML) separate from looks (CSS).
+  */
+  & fieldset {
+    display: grid;
+    gap: 0.35rem;
+    padding: 1rem;
+    border: 1px solid var(--light-grey);
+    border-radius: 6px;
+  }
+
+  /*
+    PLAIN ENGLISH: The group titles ("Customer Name," etc.).
+    LOGIC: Bold and in the site's brown accent color (--tertiary-color).
+    WHY WE NEED IT: Makes each section easy to spot at a glance.
+    LEARNING GAP: <legend> sits ON the fieldset's border line by default. The small
+           side padding keeps the border from touching the words.
+  */
+  & legend {
+    padding: 0 0.5rem;
+    font-weight: bold;
+    color: var(--tertiary-color);
+  }
+
+  /*
+    PLAIN ENGLISH: The small labels above each box ("First Name," etc.).
+    LOGIC: A little space above each label separates one field from the next.
+    WHY WE NEED IT: Without spacing, the fields look crammed together.
+    LEARNING GAP: The first label gets no extra space (:first-of-type), so the top of each
+           group doesn't look lopsided.
+  */
+  & label {
+    margin-top: 0.5rem;
+    font-size: var(--small-font);
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+
+  /*
+    PLAIN ENGLISH: The input boxes where the shopper types.
+    LOGIC: Full width, comfortable padding, rounded corners, matching the gray border.
+    WHY WE NEED IT: Bigger boxes are easier to click and type in, especially on a phone.
+    LEARNING GAP: font-size: 1rem stops iPhones from auto-zooming into the page when a box
+           is tapped (they zoom on anything smaller than 16px).
+  */
+  & input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid var(--light-grey);
+    border-radius: 4px;
+
+    /*
+      PLAIN ENGLISH: Shows an orange outline on the box you're typing in.
+      LOGIC: :focus means "the box that's currently selected."
+      WHY WE NEED IT: Shows shoppers (and keyboard users) where they are in the form.
+      LEARNING GAP: Never remove focus outlines without replacing them. Keyboard users
+             depend on them to see where they are. That's an accessibility requirement.
+    */
+    &:focus {
+      outline: 2px solid var(--primary-color);
+      outline-offset: 1px;
+    }
+  }
+}
+
+/*
+  PLAIN ENGLISH: Styles the Order Summary as a neat box with amounts lined up on the right.
+  LOGIC: The orange border matches the site's dividers. Each line uses flexbox with
+         "space-between," which pushes the label left and the amount right.
+         The amounts are filled in by CheckoutProcess.mjs (Phase 5).
+  WHY WE NEED IT: Lined-up numbers are much easier to read, like a real receipt.
+  LEARNING GAP: This works without changing the HTML. "Items: " (plain text) and the <span>
+         become two separate flex items, so space-between can push them apart.
+*/
+#order-summary {
+  padding: 1rem;
+  border: 2px solid var(--primary-color);
+  border-radius: 6px;
+  background-color: #fafafa;
+
+  & h3 {
+    margin-bottom: 0.5rem;
+  }
+
+  /*
+    PLAIN ENGLISH: Each line of the summary (Items, Subtotal, Tax, Shipping, Total).
+    LOGIC: padding: 0.4rem 0 replaces the site-wide p padding with a smaller, top/bottom only
+           version. A thin line separates each row, like a receipt.
+    WHY WE NEED IT: This is what fixes the big gaps you saw between the summary lines.
+    LEARNING GAP: The last line (Order Total) has no line under it (:last-child), because
+           there's nothing below it to separate.
+  */
+  & p {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--light-grey);
+
+    &:last-child {
+      border-bottom: none;
+      font-size: var(--large-font);
+    }
+
+    /*
+      PLAIN ENGLISH: Lines up the Order Total amount on the right, like the other rows.
+      LOGIC: In the HTML, the whole Order Total line is wrapped in <strong>. That makes it ONE
+             item, so space-between on the <p> can't split it. We give <strong> its own
+             flexbox so its label and amount split apart.
+      WHY WE NEED IT: Without this, only the Order Total amount would sit on the left while
+             every other amount is on the right.
+      LEARNING GAP: Flexbox only arranges an element's DIRECT children. The <span> inside
+             <strong> is a grandchild of the <p>, so the <p>'s flexbox can't reach it.
+    */
+    & strong {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+  }
+}
+
+/*
+  PLAIN ENGLISH: Styles the alert bar: message on the left, X on the right.
+  LOGIC: Flexbox with space-between pushes the message and X apart. Colors reuse the site's
+         orange (--primary-color) and brown (--tertiary-color), defined at the top of this file.
+         Written with nested CSS, from this week's lesson.
+  WHY WE NEED IT: The W04 stretch goal asks for an alert matching the example screenshot.
+  LEARNING GAP: cursor: pointer on the X shows a hand icon, so the shopper knows it's clickable.
+         The padding on "& p" overrides the site-wide paragraph padding.
+*/
+.alert {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem 0;
+  padding: 0 1rem;
+  background-color: var(--primary-color);
+  border: 1px solid var(--tertiary-color);
+  border-radius: 6px;
+
+  & p {
+    padding: 0.5rem 0;
+  }
+
+  & span {
+    padding: 0.5rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
+
+/*
+  PLAIN ENGLISH: Centers the success page message and styles its "Continue Shopping" button.
+  LOGIC: text-align centers the text. The link gets the site's green (--secondary-color)
+         button look, with some space above it.
+  WHY WE NEED IT: Keeps the success page consistent with the styled cart and checkout pages.
+  LEARNING GAP: The .checkout-button styles from last activity were written INSIDE .cart-footer
+         (nested), so they only apply there. That's why we add the button look here too.
+*/
+.order-success {
+  text-align: center;
+
+  & .checkout-button {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5em 2em;
+    background-color: var(--secondary-color);
+    color: white;
+    text-decoration: none;
+  }
+}

@@ -48,6 +48,17 @@ export default class ExternalServices {
     return data.Result;
   }
 
+  async findProductsByName(query, category) {
+    const products = await this.getData(category);
+    const searchTerm = query.toLowerCase().trim();
+
+    return products.filter(
+      (product) =>
+        product.NameWithoutBrand.toLowerCase().includes(searchTerm) ||
+        product.Brand.Name.toLowerCase().includes(searchTerm),
+    );
+  }
+
   // PLAIN ENGLISH: Gets ONE product by its Id.
   // LOGIC: A GET request to .../product/880RR. Returns data.Result, like getData.
   // WHY WE NEED IT: The product detail page uses this to show one product.

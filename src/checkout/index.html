@@ -18,7 +18,7 @@
       PLAIN ENGLISH: Loads this page's JavaScript file (checkout.js).
       LOGIC: "../js/" means "go up out of checkout/, then into js/." type="module" allows
              import/export to work.
-      WHY WE NEED IT: checkout.js loads the header/footer now, and will run the checkout process later.
+      WHY WE NEED IT: checkout.js loads the header/footer and runs the checkout process.
       LEARNING GAP: Without type="module", the browser shows an error on the "import" line
              ("Cannot use import statement outside a module").
     -->
@@ -74,7 +74,7 @@
             PLAIN ENGLISH: Section 2, the address (billing and shipping treated as the same).
             LOGIC: Four inputs; their names match the server's keys: street, city, state, zip.
             WHY WE NEED IT: Needed to "ship" the order, and zip triggers the tax/shipping math.
-            LEARNING GAP: The zip code box has id="zip." In Phase 8, JavaScript watches THIS box.
+            LEARNING GAP: The zip code box has id="zip." JavaScript watches THIS box.
                    When the shopper finishes typing the zip, the tax, shipping, and total appear.
                    That's what the instructions mean by "called after the user fills in the zip code."
           -->
@@ -88,10 +88,29 @@
             <input type="text" id="city" name="city" required />
 
             <label for="state">State</label>
-            <input type="text" id="state" name="state" required />
+            <!--
+              PLAIN ENGLISH: State must be exactly 2 letters (like ID).
+              LOGIC: pattern is a rule the typed text must match. [A-Za-z]{2} = exactly 2 letters.
+                     title is the hint the browser shows if the rule is broken.
+              WHY WE NEED IT: The W04 Individual Activity asks what else to add from the MDN
+                     client-side validation reading, to help users give good input.
+              LEARNING GAP: Without "title," the browser only says "match the requested format,"
+                     which doesn't tell the shopper WHAT format.
+            -->
+            <input type="text" id="state" name="state" required
+              pattern="[A-Za-z]{2}" maxlength="2" title="2-letter state code, like ID" />
 
             <label for="zip">Zip Code</label>
-            <input type="text" id="zip" name="zip" required />
+            <!--
+              PLAIN ENGLISH: Zip must be exactly 5 digits.
+              LOGIC: \d{5} = exactly 5 numbers. maxlength stops extra typing. inputmode="numeric"
+                     shows a number keypad on phones.
+              WHY WE NEED IT: Catches typos before the order is sent.
+              LEARNING GAP: type="number" would remove leading zeros (01234 becomes 1234),
+                     which breaks real zip codes. That's why we keep type="text" plus a pattern.
+            -->
+            <input type="text" id="zip" name="zip" required
+              pattern="\d{5}" maxlength="5" inputmode="numeric" title="5-digit zip code" />
           </fieldset>
 
           <!--
@@ -106,18 +125,42 @@
             <legend>Payment</legend>
 
             <label for="cardNumber">Credit Card Number</label>
-            <input type="text" id="cardNumber" name="cardNumber" inputmode="numeric" required />
+            <!--
+              PLAIN ENGLISH: Card number must be exactly 16 digits, no spaces.
+              LOGIC: \d{16} = exactly 16 numbers.
+              WHY WE NEED IT: Stops obviously wrong card numbers before contacting the server.
+              LEARNING GAP: The browser only checks the FORMAT. The server still decides if the
+                     card is valid, which is why we ALSO need the error alerts.
+            -->
+            <input type="text" id="cardNumber" name="cardNumber" inputmode="numeric" required
+              pattern="\d{16}" maxlength="16" title="16-digit card number, no spaces" />
 
             <label for="expiration">Expiration Date (MM/YY)</label>
-            <input type="text" id="expiration" name="expiration" placeholder="MM/YY" required />
+            <!--
+              PLAIN ENGLISH: Expiration must look like MM/YY (like 8/27 or 08/27).
+              LOGIC: (0?[1-9]|1[0-2]) = month 1-12 with an optional leading 0; /\d{2} = slash + 2 digits.
+              WHY WE NEED IT: The server expects this format (the example order uses "8/21").
+              LEARNING GAP: This can't check if the date is in the PAST. That's the server's job,
+                     and our alert will show its message if the card is expired.
+            -->
+            <input type="text" id="expiration" name="expiration" placeholder="MM/YY" required
+              pattern="(0?[1-9]|1[0-2])/\d{2}" maxlength="5" title="MM/YY, like 08/27" />
 
             <label for="code">Security Code</label>
-            <input type="text" id="code" name="code" inputmode="numeric" required />
+            <!--
+              PLAIN ENGLISH: Security code must be exactly 3 digits.
+              LOGIC: \d{3} = exactly 3 numbers.
+              WHY WE NEED IT: Catches typos before sending.
+              LEARNING GAP: maxlength stops typing past 3, but pattern is what stops FEWER than 3.
+                     You need both for "exactly."
+            -->
+            <input type="text" id="code" name="code" inputmode="numeric" required
+              pattern="\d{3}" maxlength="3" title="3-digit security code" />
           </fieldset>
 
           <!--
             PLAIN ENGLISH: The order summary box showing the money breakdown.
-            LOGIC: Each <span> has an id that is an empty "slot." CheckoutProcess.mjs (Phase 5)
+            LOGIC: Each <span> has an id that is an empty "slot." CheckoutProcess.mjs
                    finds each slot by id and types in the number. id="order-summary" on the
                    outer box is the "outputSelector" the instructions mention.
             WHY WE NEED IT: The assignment requires subtotal, tax, shipping estimate, and order
@@ -137,11 +180,14 @@
           <!--
             PLAIN ENGLISH: The button that places the order.
             LOGIC: type="submit" tells the browser "this sends the form." The browser checks
-                   every "required" box first. If any are empty, it stops and shows a message.
+                   every rule first (required boxes AND the pattern formats). If anything is
+                   wrong, it stops and shows a message next to that box.
             WHY WE NEED IT: The assignment requires a Checkout button.
-            LEARNING GAP: Right now, clicking it (with everything filled in) will just reload
-                   the page. That's the browser's default behavior. In Phase 8, we add
-                   event.preventDefault() to stop the reload and send the order with JavaScript.
+            LEARNING GAP: Because checkout.js listens for the form's "submit" event (not a click
+                   on this button), the browser's validation runs automatically. That's why we
+                   don't need checkValidity() or reportValidity() from the instructions.
+                   event.preventDefault() in checkout.js stops the page reload so JavaScript
+                   can send the order instead.
           -->
           <button type="submit" id="checkout-submit">Checkout</button>
         </form>

@@ -554,3 +554,54 @@ footer {
     }
   }
 }
+
+/*
+  PLAIN ENGLISH: Styles the alert bar: message on the left, X on the right.
+  LOGIC: Flexbox with space-between pushes the message and X apart. Colors reuse the site's
+         orange (--primary-color) and brown (--tertiary-color), defined at the top of this file.
+         Written with nested CSS, from this week's lesson.
+  WHY WE NEED IT: The W04 stretch goal asks for an alert matching the example screenshot.
+  LEARNING GAP: cursor: pointer on the X shows a hand icon, so the shopper knows it's clickable.
+         The padding on "& p" overrides the site-wide paragraph padding.
+*/
+.alert {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem 0;
+  padding: 0 1rem;
+  background-color: var(--primary-color);
+  border: 1px solid var(--tertiary-color);
+  border-radius: 6px;
+
+  & p {
+    padding: 0.5rem 0;
+  }
+
+  & span {
+    padding: 0.5rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
+
+/*
+  PLAIN ENGLISH: Centers the success page message and styles its "Continue Shopping" button.
+  LOGIC: text-align centers the text. The link gets the site's green (--secondary-color)
+         button look, with some space above it.
+  WHY WE NEED IT: Keeps the success page consistent with the styled cart and checkout pages.
+  LEARNING GAP: The .checkout-button styles from last activity were written INSIDE .cart-footer
+         (nested), so they only apply there. That's why we add the button look here too.
+*/
+.order-success {
+  text-align: center;
+
+  & .checkout-button {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5em 2em;
+    background-color: var(--secondary-color);
+    color: white;
+    text-decoration: none;
+  }
+}

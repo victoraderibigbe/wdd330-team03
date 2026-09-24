@@ -1,10 +1,12 @@
 // PLAIN ENGLISH: Bring in the tools this file needs.
-// LOGIC: getLocalStorage reads the cart. ExternalServices sends the order to the server.
-// WHY WE NEED IT: Reusing existing tools instead of rewriting them.
-// LEARNING GAP: getLocalStorage has curly braces (a named export from utils.mjs).
-//               ExternalServices has none (a default export). Mixing these up gives
-//               "does not provide an export named..." errors.
-import { getLocalStorage } from './utils.mjs';
+// LOGIC: getLocalStorage reads the cart. alertMessage shows an error bar; removeAllAlerts
+//        clears old error bars. ExternalServices sends the order to the server.
+// WHY WE NEED IT: Reusing existing tools instead of rewriting them. The two alert tools are
+//                 new this week, used in the catch block of checkout() below.
+// LEARNING GAP: Named exports from utils.mjs go inside ONE set of curly braces, separated
+//               by commas. ExternalServices has none (a default export). Mixing these up
+//               gives "does not provide an export named..." errors.
+import { getLocalStorage, alertMessage, removeAllAlerts } from './utils.mjs';
 import ExternalServices from './ExternalServices.mjs';
 
 // PLAIN ENGLISH: Creates one "messenger" for talking to the server.
@@ -130,13 +132,22 @@ export default class CheckoutProcess {
             `$${this.orderTotal.toFixed(2)}`;
     }
 
-    // PLAIN ENGLISH: Builds the complete order and sends it to the server.
-    // LOGIC: 1) Make sure the totals are calculated. 2) Turn the form into an object.
-    //        3) Add the date, totals, and packaged items. 4) Send it with services.checkout().
-    //        5) Show the server's answer in the console.
-    // WHY WE NEED IT: The assignment is complete when we get a response from this POST.
-    // LEARNING GAP: try/catch catches a failed request so the page doesn't crash silently.
-    //               Showing friendly success/error messages to the shopper is NEXT week's activity.
+    // PLAIN ENGLISH: Builds the order, sends it, then either goes to the success page or shows
+    //                the server's error messages.
+    // LOGIC: 1) Calculate totals. 2) Build the order object from the form + cart.
+    //        3) TRY sending it. If it works: empty the cart and go to the success page.
+    //        4) If it fails (CATCH): clear old alerts, then show each message the server sent.
+    //        The error details come from the server's reply, passed up by convertToJson
+    //        in ExternalServices.mjs.
+    // WHY WE NEED IT: The W04 Individual Activity requires catching the error here (where the
+    //                 form lives), a success page, and clearing the cart on success.
+    // LEARNING GAP: The server's error details arrive as an OBJECT, like
+    //               { cardNumber: "Invalid Card Number", expiration: "Card expired" }.
+    //               "for...in" loops through each key so every problem gets its own alert.
+    //               We check typeof === 'object' in case the error is something else (like no
+    //               internet), which gets a general message instead.
+    //               The success page path starts with "/" so it works whether the address
+    //               ends in "/checkout/" or "/checkout".
     async checkout(form) {
         this.calculateOrderTotal();
 
@@ -150,8 +161,23 @@ export default class CheckoutProcess {
         try {
             const response = await services.checkout(order);
             console.log('Server response:', response);
+
+            // Happy path: empty the cart, then go to the success page.
+            localStorage.removeItem(this.key);
+            location.assign('/checkout/success.html');
             return response;
         } catch (err) {
+            // Unhappy path: clear old messages, then show what went wrong.
+            removeAllAlerts();
+
+            if (err.name === 'servicesError' && typeof err.message === 'object') {
+                for (const key in err.message) {
+                    alertMessage(err.message[key]);
+                }
+            } else {
+                alertMessage('Something went wrong placing your order. Please try again.');
+            }
+
             console.log('Checkout error:', err);
         }
     }

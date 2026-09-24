@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sleep Outside | Order Confirmed</title>
+
+    <!--
+      PLAIN ENGLISH: Loads the site's shared styles, the same file every other page uses.
+      LOGIC: The "/" at the start means "start from the top of the site," so this works from any folder.
+      WHY WE NEED IT: Keeps the success page looking like the rest of SleepOutside.
+      LEARNING GAP: Same line as the checkout and cart pages. Matching patterns avoids
+             "why does only this page look broken?" bugs.
+    -->
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <!--
+      PLAIN ENGLISH: Loads the shared header and footer on this page.
+      LOGIC: A small module script imports loadHeaderFooter from utils.mjs and runs it.
+             The header and footer come from the partials folder (partials/header.html and
+             partials/footer.html).
+      WHY WE NEED IT: The W04 Individual Activity says to add the base formatting, including
+             the header and footer.
+      LEARNING GAP: Written inline because the page needs only one line of JavaScript. A
+             separate file would work too; this avoids an extra file for a single call.
+             "../js/" means "go up out of checkout/, then into js/."
+             type="module" is required, or the "import" line causes an error.
+    -->
+    <script type="module">
+      import { loadHeaderFooter } from '../js/utils.mjs';
+      loadHeaderFooter();
+    </script>
+  </head>
+
+  <body>
+    <!--
+      PLAIN ENGLISH: An empty header that gets filled in automatically.
+      LOGIC: loadHeaderFooter() finds id="main-header" and pastes in partials/header.html.
+      WHY WE NEED IT: One shared header for every page.
+      LEARNING GAP: The id must be exactly "main-header," or the page has no header.
+    -->
+    <header class="divider" id="main-header"></header>
+
+    <!--
+      PLAIN ENGLISH: The success message the shopper sees after placing an order.
+      LOGIC: A heading, a thank-you message, and a link back to shopping. The shopper arrives
+             here from CheckoutProcess.mjs, right after the server accepts the order.
+      WHY WE NEED IT: The assignment requires a success page instead of leaving shoppers on the form.
+      LEARNING GAP: By the time this page loads, the cart was already cleared in
+             CheckoutProcess.mjs, so the cart badge in the header should show 0.
+    -->
+    <main class="divider">
+      <section class="products order-success">
+        <h2>Thank you! Your order was placed.</h2>
+        <p>We've received your order and will begin processing it right away.</p>
+        <a href="/index.html" class="checkout-button">Continue Shopping</a>
+      </section>
+    </main>
+
+    <!--
+      PLAIN ENGLISH: An empty footer that gets filled in automatically.
+      LOGIC: Same as the header: loadHeaderFooter() finds id="main-footer" and pastes in
+             partials/footer.html.
+      WHY WE NEED IT: One shared footer file for the whole site.
+      LEARNING GAP: Same as the header: the id spelling must match exactly.
+    -->
+    <footer id="main-footer"></footer>
+  </body>
+</html>

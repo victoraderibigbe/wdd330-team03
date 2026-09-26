@@ -26,5 +26,15 @@
             <!-- <text x="0" y="115" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">Created by Natalia Woodroffe</text>
             <text x="0" y="120" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">from the Noun Project</text> -->
           </svg>
+                    <!--
+            PLAIN ENGLISH: The little number on the backpack that shows how many items are in the cart.
+            LOGIC: updateCartCount() in utils.mjs finds this span by its id ("cart-count") and puts
+                   the number inside. The number comes from the "so-cart" list saved in localStorage.
+            WHY WE NEED IT: A teammate's header update removed the badge, so updateCartCount()
+                   had nothing to fill in. This puts it back.
+            LEARNING GAP: The id is how JavaScript finds it. The class is how CSS styles it.
+                   Same element, two different "name tags" for two different jobs.
+          -->
+          <span id="cart-count" class="cart-count">0</span>
         </a>
       </div>

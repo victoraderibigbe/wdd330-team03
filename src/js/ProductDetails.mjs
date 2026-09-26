@@ -1,4 +1,4 @@
-import { getLocalStorage, setLocalStorage, updateCartCount } from './utils.mjs';
+import { getLocalStorage, setLocalStorage, updateCartCount, animateCart } from './utils.mjs';
 
 export default class ProductDetails {
     constructor(productId, dataSource) {
@@ -28,7 +28,15 @@ export default class ProductDetails {
             });
         }
         setLocalStorage('so-cart', itensCart);
-         updateCartCount();
+        updateCartCount();
+        // PLAIN ENGLISH: Bounces the backpack icon after the item is saved and the number updates.
+        // LOGIC: Runs last, so the shopper sees the new number AND the bounce together.
+        //        animateCart() lives in utils.mjs and adds the "cart-animate" class from style.css.
+        // WHY WE NEED IT: This is the moment an item goes in the cart, so it's the right time
+        //                 to show the bounce (the Trello task).
+        // LEARNING GAP: Order matters. Save first, update the number second, bounce third.
+        //               If we bounced before saving, the badge could show the old number.
+        animateCart();
     }
 
     renderProductDetails() {

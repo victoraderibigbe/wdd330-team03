@@ -79,6 +79,35 @@ export function updateCartCount() {
   }
 }
 
+// PLAIN ENGLISH: Makes the backpack icon bounce once when an item is added to the cart.
+// LOGIC: 1) Find the backpack (.cart) in the header. If it isn't on the page, stop.
+//        2) Remove "cart-animate" first, in case it's still there from last time.
+//        3) Read offsetWidth to make the browser "reset," so the bounce can replay.
+//        4) Add "cart-animate". The CSS rule in style.css starts the bounce.
+//        5) When the bounce ends (animationend), remove the class so it's ready next time.
+//        Called by addProductToCart() in ProductDetails.mjs, right after updateCartCount().
+// WHY WE NEED IT: This is the Trello task: animate the cart (backpack) icon when an item
+//                 is added, so shoppers can see their click worked.
+// LEARNING GAP: If you add a class that's already there, nothing happens, so the bounce
+//               wouldn't replay on a second click. Removing it, forcing the reset, then
+//               adding it again is what makes it bounce EVERY time. { once: true } means
+//               the listener removes itself after one use, so listeners don't pile up.
+export function animateCart() {
+  const cart = qs('.cart');
+  if (!cart) return;
+
+  cart.classList.remove('cart-animate');
+  void cart.offsetWidth;
+  cart.classList.add('cart-animate');
+
+  cart.addEventListener(
+    'animationend',
+    () => cart.classList.remove('cart-animate'),
+    { once: true },
+  );
+}
+
+
 // PLAIN ENGLISH: Shows a friendly message bar at the top of the page, with an X to close it.
 // LOGIC: 1) Build a <div class="alert"> holding the message and an X.
 //        2) Listen for clicks on it. If the X (a <span>) was clicked, remove the alert.

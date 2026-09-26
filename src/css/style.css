@@ -131,6 +131,94 @@ button {
   fill: gray;
 }
 
+/*
+  PLAIN ENGLISH: Styles the little number bubble on the corner of the backpack.
+  LOGIC: .cart already has "position: relative", so "position: absolute" here lets us pin
+         the bubble to the backpack's top-right corner. Brown background (--tertiary-color)
+         and white text match the site's colors. The number itself comes from
+         updateCartCount() in utils.mjs, which reads the "so-cart" list in localStorage.
+  WHY WE NEED IT: A teammate's update removed the badge styles. Without them, the number
+         would just sit under the backpack as plain text.
+  LEARNING GAP: "absolute" positions an element relative to the nearest parent that has
+         "position: relative". If .cart didn't have it, the bubble would fly off to the
+         corner of the whole page instead.
+*/
+.cart-count {
+  position: absolute;
+  top: 0.5em;
+  right: -0.6em;
+  min-width: 1.4em;
+  padding: 0.1em 0.35em;
+  background-color: var(--tertiary-color);
+  color: white;
+  font-size: 0.7em;
+  font-weight: bold;
+  line-height: 1.2;
+  border-radius: 999px;
+  text-align: center;
+}
+
+/*
+  PLAIN ENGLISH: The bounce "dance steps": the backpack hops up, grows a little, then settles.
+  LOGIC: @keyframes lists what the element looks like at each point in time (0% = start,
+         100% = end). translateY moves it up and down; scale makes it bigger or smaller.
+  WHY WE NEED IT: This is the animation the Trello card asks for, so shoppers see that
+         their item went into the cart.
+  LEARNING GAP: @keyframes only DEFINES the dance. Nothing moves until a class uses it with
+         the "animation" property (next rule).
+*/
+
+@keyframes cart-bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  25% {
+    transform: translateY(-14px);
+  }
+
+  45% {
+    transform: translateY(0);
+  }
+
+  65% {
+    transform: translateY(-6px);
+  }
+
+  85% {
+    transform: translateY(0);
+  }
+}
+
+
+/*
+  PLAIN ENGLISH: When the backpack gets the "cart-animate" class, it does the bounce once.
+  LOGIC: animateCart() in utils.mjs (next step) adds this class when an item is added to
+         the cart, then removes it when the bounce finishes, so it can bounce again next time.
+  WHY WE NEED IT: Connects the dance steps (@keyframes) to the backpack.
+  LEARNING GAP: The class is added and removed by JavaScript. CSS handles how it LOOKS;
+         JavaScript decides WHEN it happens.
+*/
+.cart.cart-animate {
+  animation: cart-bounce 0.45s ease;
+}
+
+/*
+  PLAIN ENGLISH: Turns off the bounce for people who asked their device for less motion.
+  LOGIC: prefers-reduced-motion reads the "reduce motion" setting on the shopper's phone
+         or computer. If it's on, the animation is set to none.
+  WHY WE NEED IT: Some people get dizzy or sick from movement on screens. This is an
+         accessibility best practice.
+  LEARNING GAP: The badge number still updates for everyone. Only the bounce is skipped.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .cart.cart-animate {
+    animation: none;
+  }
+}
+
 /* End cart icon styles */
 
 .mission {

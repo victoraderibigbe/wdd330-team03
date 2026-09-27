@@ -20,11 +20,14 @@ const baseURL = import.meta.env.VITE_SERVER_URL || 'https://wdd330-backend-osp8.
 //               "async" is added because we now "await" res.json() inside this function.
 //               The body must be read BEFORE throwing, or the details are lost.
 async function convertToJson(res) {
-  const jsonResponse = await res.json();
+  const jsonResponse = await res.json(); //Refactor this function by converting the response body to JSON before checking if it's okay.
   if (res.ok) {
     return jsonResponse;
   } else {
-    throw { name: 'servicesError', message: jsonResponse };
+    //Use the Error() object's name and message properties to send the response body back to
+    //  the calling function. Change the line that looks like throw new Error('Bad Response');
+    //  to something more like this:
+  throw { name: 'servicesError', message: jsonResponse };//The variable jsonResponse should be the body of the response from the server that converted to JSON.
   }
 }
 

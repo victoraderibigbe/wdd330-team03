@@ -1,6 +1,8 @@
 import { loadHeaderFooter } from './utils.mjs';
 import ExternalServices from './ExternalServices.mjs';
 import ProductList from './ProductList.mjs';
+import Alert from './Alert.js';
+const alert = new Alert(); alert.init();
 
 async function init() {
   // Load the header and footer first.

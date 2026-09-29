@@ -5,6 +5,7 @@
 // LEARNING GAP: qs is new to this import list. If you forget to import a function,
 //               you get "qs is not defined," even though it exists in utils.mjs.
 import { getLocalStorage, renderListWithTemplate, qs } from './utils.mjs';
+import { responsiveImageAttributes } from './responsiveImage.mjs';
 
 // PLAIN ENGLISH: A "fill-in-the-blanks" HTML card for one item in the cart.
 // LOGIC: It takes one product object and plugs its details into the HTML using ${ }.
@@ -19,7 +20,7 @@ function cartItemTemplate(item) {
   <button class='remove-button' data-id='${item.Id}' type='button'>X</button>
   <a href='#' class='cart-card__image'>
     <img
-      src='${item.Images.PrimaryMedium}' 
+      ${responsiveImageAttributes(item.Images, '(max-width: 500px) 25vw, 150px')}
       alt='${item.NameWithoutBrand}'
     />
   </a>

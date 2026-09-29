@@ -1,4 +1,5 @@
 import { renderListWithTemplate } from './utils.mjs';
+import { responsiveImageAttributes } from './responsiveImage.mjs';
 
 function discountBadge(product) {
   const original = product.SuggestedRetailPrice;
@@ -16,7 +17,7 @@ function productCardTemplate(product) {
   return `<li class="product-card">
     <a href="/product_pages/?product=${product.Id}">
       <div class="product-card__image-wrapper">
-        <img src="${product.Images.PrimaryMedium}" alt="${product.NameWithoutBrand}" />
+        <img ${responsiveImageAttributes(product.Images, '(max-width: 500px) 45vw, 250px')} alt="${product.NameWithoutBrand}" />
         ${discountBadge(product)}
       </div>
       <h3 class="card__brand">${product.Brand.Name}</h3>

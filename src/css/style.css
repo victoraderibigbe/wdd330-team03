@@ -295,7 +295,7 @@ button {
 .cart-card {
   position: relative;
   display: grid;
-  grid-template-columns: 25% auto 15%;
+  grid-template-columns: 25% minmax(0, 1fr) auto;
   font-size: var(--small-font);
   /* max-height: 120px; */
   align-items: center;
@@ -340,6 +340,27 @@ button {
 .cart-card__quantity {
   grid-row: 2;
   grid-column: 3;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  padding: 0.75rem;
+  white-space: nowrap;
+}
+
+.cart-card__quantity input {
+  width: 3.5rem;
+  padding: 0.35rem;
+  border: 1px solid var(--light-grey);
+  border-radius: 4px;
+  color: var(--dark-grey);
+  font-size: 1rem;
+  text-align: center;
+}
+
+.cart-card__quantity input:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 1px;
 }
 
 .cart-card__price {
@@ -365,7 +386,7 @@ button {
 
   .cart-card {
     font-size: inherit;
-    grid-template-columns: 150px auto 15%;
+    grid-template-columns: 150px minmax(0, 1fr) auto;
   }
 }
 

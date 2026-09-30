@@ -4,7 +4,7 @@
 // WHY WE NEED IT: These tools already exist in utils.mjs, so we reuse them instead of rewriting them.
 // LEARNING GAP: qs is new to this import list. If you forget to import a function,
 //               you get "qs is not defined," even though it exists in utils.mjs.
-import { getLocalStorage, renderListWithTemplate, qs } from './utils.mjs';
+import { getLocalStorage, renderListWithTemplate, qs, setLocalStorage } from './utils.mjs';
 import { responsiveImageAttributes } from './responsiveImage.mjs';
 
 // PLAIN ENGLISH: A "fill-in-the-blanks" HTML card for one item in the cart.
@@ -28,7 +28,10 @@ function cartItemTemplate(item) {
     <h2 class='card__name'>${item.NameWithoutBrand}</h2>
   </a>
   <p class='cart-card__color'>${item.Colors[0].ColorName}</p>
-  <p class='cart-card__quantity'>qty: ${item.Quantity || 1}</p>
+  <label class='cart-card__quantity'>
+    qty:
+    <input type='number' min='1' value='${item.Quantity || 1}' data-id='${item.Id}' />
+  </label>
   <p class='cart-card__price'>$${item.FinalPrice}</p>
 </li>`;
 }
@@ -68,6 +71,7 @@ export default class ShoppingCart {
     }
     renderListWithTemplate(cartItemTemplate, this.listElement, cartItems, 'afterbegin', true);
     this.addRemoveListeners();
+    this.addQuantityListeners();
     // NEW: show the total once the items are on the page.
     this.displayCartTotal(cartItems);
   }
@@ -109,6 +113,29 @@ export default class ShoppingCart {
     removeButtons.forEach((button) => {
       button.addEventListener('click', (event) => this.removeFromCart(event));
     });
+  }
+
+  addQuantityListeners() {
+    const quantityInputs = document.querySelectorAll('.cart-card__quantity input');
+    quantityInputs.forEach((input) => {
+      input.addEventListener('change', (event) => this.updateQuantity(event));
+    });
+  }
+
+  updateQuantity(event) {
+    const productId = event.target.dataset.id;
+    const quantity = Math.max(1, Number(event.target.value));
+    const cartItems = getLocalStorage(this.key) || [];
+
+    const newCartItems = cartItems.map((item) => {
+      if (item.Id === productId) {
+        item.Quantity = quantity;
+      }
+      return item;
+    });
+
+    setLocalStorage(this.key, newCartItems);
+    this.init();
   }
 
   // PLAIN ENGLISH: Removes the clicked item from the cart and redraws the page.

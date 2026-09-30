@@ -1,10 +1,9 @@
 .DS_Store
 .cache
-.vscode
 web_modules
 node_modules
 dist
-.env
 branch_structure.json
 temp_auto_push.bat
 temp_interactive_push.bat
+config.bat
